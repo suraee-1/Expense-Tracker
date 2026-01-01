@@ -1,5 +1,23 @@
+import json
+def load_expenses():
+    try :
+        with open('expenses.json','r') as file:
+             return json.load(file)
+    except (FileNotFoundError,json.JSONDecodeError):
+
+        print("Error: The file 'expenses.json' was not found.")
+        return []
+def save_expenses(expenses):
+    try :
+        with open('expenses.json','w') as json_file:
+         json.dump(expenses, json_file, indent=4)
+    except IOError as e:
+        print(f"Error saving file: {e}")
+
+
+
+
 def menu():
-    
     print("\n\t\t1.Add Expenses")
     print("\t\t2.View Expenses ")
     print("\t\t3.View Total")
@@ -22,6 +40,7 @@ def main():
     print("\n\n\t\tWelcome to Expense Tracker.")
     print("\n\t\tYour one stop budgeting solution.")
     expenses = [] 
+    expenses = load_expenses()
     while True :
         try: 
          menu()
@@ -37,11 +56,15 @@ def main():
                 "Descriptions" : descriptions
             }
             expenses.append(expense)
+            save_expenses(expenses)
+
          elif choice == 2:
              for expense in expenses:
                  print(f"\n\tAmount : {expense['Amount']}")
                  print(f"\tCategory :{expense['Category']}")    
                  print(f"\tDescriptions :{expense['Descriptions']}")   
+                 
+                 
          elif choice == 3 :
                 total = 0
                 for expense in expenses:
